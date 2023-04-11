@@ -35,6 +35,7 @@ classifiers = [
     'License :: OSI Approved :: MIT License',
 ]
 dependencies = [
+    'bioread',
     'mne',
     'mne-icalabel',
     'numpy>=1.21',
