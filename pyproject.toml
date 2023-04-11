@@ -3,9 +3,9 @@ requires = ['setuptools >= 61.0.0']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'template'
+name = 'eeg_cybersickness'
 version = '0.1.0'
-description = 'Template for python projects.'
+description = 'Study the cybersickness through rotation of the pitch, yaw and roll axis in a VR simulation.'
 readme = 'README.md'
 license = {file = 'LICENSE'}
 requires-python = '>=3.8'
@@ -17,7 +17,10 @@ maintainers = [
 ]
 keywords = [
     'python',
-    'template',
+    'eeg',
+    'neuroscience',
+    'cybersickness',
+    'virtual reality',
 ]
 classifiers = [
     'Operating System :: Microsoft :: Windows',
@@ -32,6 +35,8 @@ classifiers = [
     'License :: OSI Approved :: MIT License',
 ]
 dependencies = [
+    'mne',
+    'mne-icalabel',
     'numpy>=1.21',
     'packaging',
     'psutil',
@@ -41,18 +46,6 @@ dependencies = [
 build = [
     'build',
     'twine',
-]
-doc = [
-    'furo',
-    'matplotlib',
-    'memory-profiler',
-    'numpydoc',
-    'sphinx',
-    'sphinxcontrib-bibtex',
-    'sphinx-copybutton',
-    'sphinx-design',
-    'sphinx-gallery',
-    'sphinx-issues',
 ]
 style = [
     'bibclean',
@@ -68,30 +61,29 @@ test = [
     'pytest-timeout',
 ]
 all = [
-    'template[build]',
-    'template[doc]',
-    'template[style]',
-    'template[test]',
+    'eeg_cybersickness[build]',
+    'eeg_cybersickness[style]',
+    'eeg_cybersickness[test]',
 ]
 full = [
-    'template[all]',
+    'eeg_cybersickness[all]',
 ]
 
 [project.urls]
-homepage = 'https://github.com/mscheltienne/template-python'
-documentation = 'https://github.com/mscheltienne/template-python'
-source = 'https://github.com/mscheltienne/template-python'
-tracker = 'https://github.com/mscheltienne/template-python/issues'
+homepage = 'https://github.com/mscheltienne/eeg-cybersickness'
+documentation = 'https://github.com/mscheltienne/eeg-cybersickness'
+source = 'https://github.com/mscheltienne/eeg-cybersickness'
+tracker = 'https://github.com/mscheltienne/eeg-cybersickness/issues'
 
 [project.scripts]
-template-sys_info = 'template.commands.sys_info:run'
+eeg_cybersickness-sys_info = 'eeg_cybersickness.commands.sys_info:run'
 
 [tool.setuptools]
 include-package-data = false
 
 [tool.setuptools.packages.find]
-include = ['template*']
-exclude = ['template*tests']
+include = ['eeg_cybersickness*']
+exclude = ['eeg_cybersickness*tests']
 
 [tool.black]
 line-length = 79
@@ -103,9 +95,6 @@ extend-exclude = '''
     | .github
     | .ruff_cache
     | setup.py
-    | doc/
-    | examples/
-    | tutorials/
 )
 '''
 
@@ -116,22 +105,18 @@ line_length = 79
 py_version = 38
 extend_skip_glob = [
     'setup.py',
-    'doc/*',
-    'examples/*',
-    'tutorials/*',
 ]
 
 [tool.pydocstyle]
 convention = 'numpy'
 ignore-decorators = '(copy_doc|property|.*setter|.*getter|pyqtSlot|Slot)'
 match = '^(?!setup|__init__|test_).*\.py'
-match-dir = '^template.*'
+match-dir = '^eeg_cybersickness.*'
 add_ignore = 'D100,D104,D107'
 
 [tool.ruff]
 line-length = 79
 extend-exclude = [
-    "doc",
     "setup.py",
 ]
 
@@ -148,9 +133,9 @@ branch = true
 cover_pylib = false
 omit = [
     '**/__init__.py',
-    '**/template/_version.py',
-    '**/template/commands/*',
-    '**/template/utils/_fixes.py',
+    '**/eeg_cybersickness/_version.py',
+    '**/eeg_cybersickness/commands/*',
+    '**/eeg_cybersickness/utils/_fixes.py',
     '**/tests/**',
 ]
 
