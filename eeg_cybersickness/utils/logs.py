@@ -1,11 +1,18 @@
+# postponed evaluation of annotations, c.f. PEP 563 and PEP 649
+# alternatively, the type hints can be defined as strings which will be
+# evaluated with eval() prior to type checking.
+from __future__ import annotations
+
 import logging
 from functools import wraps
-from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import TYPE_CHECKING, Callable, Optional, Union
 
 from ._checks import check_verbose
 from ._docs import fill_doc
 from ._fixes import _WrapStdOut
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @fill_doc

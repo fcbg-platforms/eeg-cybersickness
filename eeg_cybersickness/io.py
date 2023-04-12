@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from mne.io import BaseRaw
 
 
-def read_raw(fname_vhdr: Union[str, Path]) -> BaseRaw:
+def read_raw_eeg(fname_vhdr: Union[str, Path]) -> BaseRaw:
     """Load a raw recording.
 
     Parameters
