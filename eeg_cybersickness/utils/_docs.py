@@ -21,6 +21,33 @@ verbose : int | str | bool | None
     If a bool is provided, the verbosity is set to ``"WARNING"`` for False and
     to ``"INFO"`` for True."""
 
+# ----------------------------------- paths -----------------------------------
+docdict[
+    "root"
+] = """
+root : path-like
+    Path to the folder containing ``"raw"`` (EEG recordings) and
+    ``"raw_aux"`` (Biopac recoridngs)."""
+
+docdict[
+    "participant"
+] = """
+participant : int
+    Participant ID."""
+
+docdict[
+    "session"
+] = """
+session : int
+    Session ID. Between 1 and 4 included."""
+
+docdict[
+    "rotation_axes"
+] = """
+rotation_axes : tuple of str
+    Tuple of length (1,), (2,) or (3,) with the rotation axes used in the given
+    session: "Pitch", "Yaw", "Roll"."""
+
 # ------------------------- Documentation functions --------------------------
 docdict_indented: Dict[int, Dict[str, str]] = dict()
 

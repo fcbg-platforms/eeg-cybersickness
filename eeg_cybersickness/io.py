@@ -3,14 +3,17 @@
 # evaluated with eval() prior to type checking.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Tuple, Union
 
 import numpy as np
 from bioread import read
-from mne import create_info
+from mne import create_info, find_events
 from mne.io import RawArray, read_raw_brainvision
 
-from .utils._checks import ensure_path
+from .triggers import _create_sti, _find_event_onset
+from .utils._checks import check_rotation_axes, ensure_path
+from .utils._docs import fill_doc
+from .utils.path import get_raw_fname
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -18,7 +21,57 @@ if TYPE_CHECKING:
     from mne.io import BaseRaw
 
 
-def read_raw_eeg(fname_vhdr: Union[str, Path]) -> BaseRaw:
+@fill_doc
+def read_raw(
+    root: Union[str, Path],
+    participant: int,
+    session: int,
+    rotation_axes: Tuple[str, ...] = ("Pitch", "Yaw", "Roll"),
+) -> BaseRaw:
+    """Load a raw recording.
+
+    Parameters
+    ----------
+    %(root)s
+    %(participant)s
+    %(session)s
+    %(rotation_axes)s
+
+    Returns
+    -------
+    raw : Raw
+        MNE raw recording with synchronize ECG/EGG and a synthetic trigger
+        channel.
+    """
+    fname_eeg, fname_biopac = get_raw_fname(root, participant, session)
+    check_rotation_axes(rotation_axes)
+    raw_eeg = _read_raw_eeg(fname_eeg)
+    raw_biopac = _read_raw_biopac(fname_biopac)
+
+    # find onsets
+    events_eeg = _find_event_onset(raw_eeg, in_samples=False)
+    events_biopac = find_events(raw_biopac)[0, 0] / raw_biopac.info["sfreq"]
+    assert 0.2 <= events_biopac and 0.2 <= events_eeg
+    raw_eeg.crop(events_eeg - 0.2, None)
+    raw_biopac.crop(events_biopac - 0.2, None)
+    raw_biopac.resample(raw_eeg.info["sfreq"])
+
+    # figure out which one is longer and crop to the same size
+    if raw_biopac.times[-1] < raw_eeg.times[-1]:
+        raw_eeg.crop(0, raw_biopac.times[-1], include_tmax=True)
+    else:
+        raw_biopac.crop(0, raw_eeg.times[-1], include_tmax=True)
+
+    # create synthetic trigger channel
+    sti = _create_sti(raw_eeg, session, rotation_axes)
+
+    # concatenate
+    raw_eeg.add_channels([raw_biopac, sti], force_update_info=True)
+
+    return raw_eeg
+
+
+def _read_raw_eeg(fname_vhdr: Union[str, Path]) -> BaseRaw:
     """Load a raw recording.
 
     Parameters
@@ -30,42 +83,14 @@ def read_raw_eeg(fname_vhdr: Union[str, Path]) -> BaseRaw:
     -------
     raw : Raw
         MNE raw instance, with the mastoids and the EOG channel dropped.
-
-    Notes
-    -----
-    A synthetic trigger channel STI is added.
     """
     fname_vhdr = ensure_path(fname_vhdr, must_exist=True)
     raw = read_raw_brainvision(fname_vhdr, preload=True)
     raw.drop_channels(["M1", "M2", "EOG"])
-
-    # create stim channel
-    assert raw.annotations[2]["description"] == "Stimulus/s1"
-    onset = int(raw.annotations[2]["onset"] * raw.info["sfreq"])
-    info = create_info(["STI"], sfreq=raw.info["sfreq"], ch_types="stim")
-    data = np.zeros(shape=(1, raw.times.size))
-
-    # Let's figure out where we need to put ones in the array. We need to build
-    # the sequence which corresponds to (5s x 12 + 4s x 1) x 20.
-    sequence = np.empty(13)
-    sequence[:-1] = np.arange(
-        0, 5 * 12 * raw.info["sfreq"], 5 * raw.info["sfreq"]
-    )
-    sequence[-1] = 64 * raw.info["sfreq"]
-    sequence = sequence.astype(int)
-    # gives us one of the 20 sequences and needs to start at the onset and
-    # needs to be repeated every 64 seconds.
-    for k in range(20):
-        for elt in sequence:
-            idx = int(onset + k * 64 * raw.info["sfreq"] + elt)
-            data[0, idx] = 1
-
-    stim = RawArray(data, info)
-    raw.add_channels([stim], force_update_info=True)
     return raw
 
 
-def read_raw_biopac(fname_biopac: Union[str, Path]) -> BaseRaw:
+def _read_raw_biopac(fname_biopac: Union[str, Path]) -> BaseRaw:
     """Load an ACQ biopac recording.
 
     Parameters
@@ -103,7 +128,7 @@ def read_raw_biopac(fname_biopac: Union[str, Path]) -> BaseRaw:
     for i, t in enumerate(data.time_index):
         data_array[:, i] = [data_or_blank(c, i) for c in data.channels]
 
-    # retrieve channel names and convert to Volts if necesary
+    # retrieve channel names and convert to Volts if necessary
     ch_names = []
     ch_types = []
     for k, channel in enumerate(data.channels):

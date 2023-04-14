@@ -252,3 +252,28 @@ def ensure_path(item: Any, must_exist: bool) -> Path:
             f"The provided path '{str(item)}' does not exist."
         )
     return item
+
+
+@fill_doc
+def check_rotation_axes(rotation_axes: Any):
+    """Check rotation_axes is valid.
+
+    Parameters
+    ----------
+    rotation_axes : Any
+        Tuple of rotation axes to check.
+
+    Returns
+    -------
+    %(rotation_axes)s
+    """
+    check_type(rotation_axes, (tuple,), "rotation_axes")
+    if len(rotation_axes) not in (1, 2, 3):
+        raise ValueError(
+            "'rotation_axes' should contain 1, 2 or 3 elements. "
+            f"The provided tuple contains {len(rotation_axes)} which is "
+            "invalid."
+        )
+    for elt in rotation_axes:
+        check_type(rotation_axes, (str,), "rotation_axes")
+        check_value(rotation_axes, ("Pitch", "Yaw", "Roll"), "rotation_axes")

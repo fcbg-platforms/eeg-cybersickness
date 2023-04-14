@@ -6,12 +6,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Union
 
 from ._checks import check_type, ensure_path
+from ._docs import fill_doc
 from .logs import logger
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
+@fill_doc
 def get_raw_fname(
     root: Union[str, Path], participant: int, session: int
 ) -> str:
@@ -19,13 +21,9 @@ def get_raw_fname(
 
     Parameters
     ----------
-    root : path-like
-        Path to the folder containing ``"raw"`` (EEG recordings) and
-        ``"raw_aux"`` (Biopac recoridngs).
-    participant : int
-        Participant ID.
-    session : int
-        Session ID. Between 1 and 4 included.
+    %(root)s
+    %(participant)s
+    %(session)s
 
     Returns
     -------

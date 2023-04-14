@@ -14,13 +14,13 @@ def load_triggers(
     ----------
     fname : str | Path
         Path to the configuration file.
-        Default to ``'eeg_cybersickness/config/triggers.ini'``.
+        Default to ``'eeg_cybersickness/triggers/triggers.ini'``.
 
     Returns
     -------
     triggers : dict
-        Trigger definitiopn containing: pitch, yaw, roll, pitch_yaw,
-        pitch_roll, yaw_roll, pitch_yaw_roll.
+        Trigger definitiopn containing: start, none, pitch, roll, yaw,
+        pitch_yaw, pitch_roll, roll_yaw, pitch_roll_yaw.
     """
     fname = ensure_path(fname, must_exist=True)
     config = ConfigParser(inline_comment_prefixes=("#", ";"))
@@ -33,13 +33,15 @@ def load_triggers(
 
     # verification
     keys = (
+        "start",
+        "none",
         "pitch",
-        "yaw",
         "roll",
-        "pitch_yaw",
+        "yaw",
         "pitch_roll",
-        "yaw_roll",
-        "pitch_yaw_roll",
+        "pitch_yaw",
+        "roll_yaw",
+        "pitch_roll_yaw",
     )
     for key in keys:
         if key not in triggers:
