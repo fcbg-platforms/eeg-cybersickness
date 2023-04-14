@@ -1,13 +1,19 @@
 """Test config.py"""
 
-from pathlib import Path
+from importlib.resources import files
 
 import pytest
 
 from eeg_cybersickness.triggers import load_triggers
 
-fname_valid = Path(__file__).parent / "data" / "test_triggers.ini"
-fname_invalid = Path(__file__).parent / "data" / "test_triggers_invalid.ini"
+fname_valid = (
+    files("eeg_cybersickness.triggers.tests") / "data" / "test_triggers.ini"
+)
+fname_invalid = (
+    files("eeg_cybersickness.triggers.tests")
+    / "data"
+    / "test_triggers_invalid.ini"
+)
 
 
 def test_load_triggers():

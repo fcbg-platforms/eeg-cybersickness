@@ -3,7 +3,7 @@
 # evaluated with eval() prior to type checking.
 from __future__ import annotations
 
-from pathlib import Path
+from importlib.resources import files
 from typing import TYPE_CHECKING, List, Tuple, Union
 
 import numpy as np
@@ -17,6 +17,8 @@ from ..utils.logs import logger
 from . import load_triggers
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from mne.io import BaseRaw
 
 
@@ -51,7 +53,7 @@ def create_sti(
     rotation_axes = sorted(rotation_axes)
     # TODO: Replace with importlib-resources
     sequence_fname = (
-        Path(__file__).parent
+        files("eeg_cybersickness.triggers")
         / "sequences"
         / f"session{session}-{'-'.join(rotation_axes)}.csv"
     )

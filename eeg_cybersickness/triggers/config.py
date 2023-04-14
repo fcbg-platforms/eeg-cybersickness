@@ -1,12 +1,22 @@
+# postponed evaluation of annotations, c.f. PEP 563 and PEP 649
+# alternatively, the type hints can be defined as strings which will be
+# evaluated with eval() prior to type checking.
+from __future__ import annotations
+
 from configparser import ConfigParser
-from pathlib import Path
-from typing import Dict, Union
+from importlib.resources import files
+from typing import TYPE_CHECKING, Dict, Union
 
 from ..utils._checks import ensure_path
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
+_DEFAULT_TRIGGERS = files("eeg_cybersickness.triggers") / "triggers.ini"
+
 
 def load_triggers(
-    fname: Union[str, Path] = Path(__file__).parent / "triggers.ini"
+    fname: Union[str, Path] = _DEFAULT_TRIGGERS,
 ) -> Dict[str, int]:
     """Load triggers from ``triggers.ini``.
 
