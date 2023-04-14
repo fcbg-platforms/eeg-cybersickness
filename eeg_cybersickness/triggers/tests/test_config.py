@@ -23,5 +23,5 @@ def test_load_triggers():
     assert tdef["roll_yaw"] == 302
     assert tdef["pitch_roll_yaw"] == 10101
 
-    with pytest.raises(ValueError, match="Key 'novel' is missing"):
+    with pytest.raises(ValueError, match="Key 'start' is missing"):
         load_triggers(fname_invalid)

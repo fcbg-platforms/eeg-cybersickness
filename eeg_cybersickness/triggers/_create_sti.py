@@ -11,17 +11,17 @@ import pandas as pd
 from mne import create_info
 from mne.io import RawArray
 
-from ..utils._checks import ensure_path
+from ..utils._checks import check_type, ensure_path
 from ..utils._docs import fill_doc
 from ..utils.logs import logger
-from . import _find_event_onset, load_triggers
+from . import load_triggers
 
 if TYPE_CHECKING:
     from mne.io import BaseRaw
 
 
 @fill_doc
-def _create_sti(
+def create_sti(
     raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]
 ) -> RawArray:
     """Create a synthetic trigger channel.
@@ -39,7 +39,7 @@ def _create_sti(
         MNE Raw object with a single "stim" channel containing the triggers
         for the rotation sequence played during that EEG recording.
     """
-    event = _find_event_onset(raw, in_samples=True)
+    event = find_event_onset(raw, in_samples=True)
     info = create_info(["STI"], sfreq=raw.info["sfreq"], ch_types="stim")
     data = np.zeros(shape=(1, raw.times.size))
     triggers = load_triggers()
@@ -113,3 +113,35 @@ def _load_sequence(fname: Union[str, Path]) -> Tuple[List[int], List[float]]:
             sequence_duration.append(row["duration"])
 
     return sequence_trigger, sequence_duration
+
+
+def find_event_onset(raw: BaseRaw, in_samples) -> Union[int, float]:
+    """Find the paradigm event onset in the EEG recording.
+
+    Parameters
+    ----------
+    raw : Raw
+        Raw recording with a ``"Stimulus/s1"`` annotation.
+    in_samples : bool
+        If True, returns the onset in samples corrected for ``raw.first_samp``.
+        If False, returns the onset in seconds.
+
+    Returns
+    -------
+    event : int | float
+        Event time in samples.
+    """
+    check_type(raw, (BaseRaw,), "raw")
+    check_type(in_samples, (bool,), "in_samples")
+    event = None
+    for annotation in raw.annotations:
+        if annotation["description"] == "Stimulus/s1":
+            event = annotation["onset"]
+            break
+    if event is None:
+        raise RuntimeError(
+            "The onset stimuli was not found in the EEG recording."
+        )
+    if in_samples:
+        event = int(event * raw.info["sfreq"] - raw.first_samp)
+    return event

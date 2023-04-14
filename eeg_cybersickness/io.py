@@ -10,7 +10,7 @@ from bioread import read
 from mne import create_info, find_events
 from mne.io import RawArray, read_raw_brainvision
 
-from .triggers import _create_sti, _find_event_onset
+from .triggers._create_sti import create_sti, find_event_onset
 from .utils._checks import check_rotation_axes, ensure_path
 from .utils._docs import fill_doc
 from .utils.path import get_raw_fname
@@ -49,7 +49,7 @@ def read_raw(
     raw_biopac = _read_raw_biopac(fname_biopac)
 
     # find onsets
-    events_eeg = _find_event_onset(raw_eeg, in_samples=False)
+    events_eeg = find_event_onset(raw_eeg, in_samples=False)
     events_biopac = find_events(raw_biopac)[0, 0] / raw_biopac.info["sfreq"]
     assert 0.2 <= events_biopac and 0.2 <= events_eeg
     raw_eeg.crop(events_eeg - 0.2, None)
@@ -63,7 +63,7 @@ def read_raw(
         raw_biopac.crop(0, raw_eeg.times[-1], include_tmax=True)
 
     # create synthetic trigger channel
-    sti = _create_sti(raw_eeg, session, rotation_axes)
+    sti = create_sti(raw_eeg, session, rotation_axes)
 
     # concatenate
     raw_eeg.add_channels([raw_biopac, sti], force_update_info=True)
