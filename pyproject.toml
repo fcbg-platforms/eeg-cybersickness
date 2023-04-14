@@ -49,7 +49,6 @@ build = [
     'twine',
 ]
 style = [
-    'bibclean',
     'black',
     'codespell',
     'isort',
