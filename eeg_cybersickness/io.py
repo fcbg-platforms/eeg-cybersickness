@@ -66,7 +66,9 @@ def read_raw(
     sti = create_sti(raw_eeg, session, rotation_axes)
 
     # concatenate
+    raw_biopac.drop_channels(["STI-Biopac"])
     raw_eeg.add_channels([raw_biopac, sti], force_update_info=True)
+    raw_eeg.set_annotations(None)
 
     return raw_eeg
 

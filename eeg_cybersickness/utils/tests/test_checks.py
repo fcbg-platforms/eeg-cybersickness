@@ -121,15 +121,15 @@ def test_check_rotation_axes():
     """Test check_rotation_axes checker."""
     check_rotation_axes(("Pitch", "Yaw", "Roll"))
     check_rotation_axes(("Pitch", "Roll"))
-    check_rotation_axes(("Pitch", ))
+    check_rotation_axes(("Pitch",))
 
     with pytest.raises(TypeError, match="must be an instance of tuple"):
         check_rotation_axes(["Pitch", "Yaw", "Roll"])
     with pytest.raises(TypeError, match="must be an instance of tuple"):
         check_rotation_axes("Yaw")
     with pytest.raises(TypeError, match="must be an instance of str"):
-        check_rotation_axes((101, ))
+        check_rotation_axes((101,))
     with pytest.raises(ValueError, match="Invalid value"):
-        check_rotation_axes(("101", ))
+        check_rotation_axes(("101",))
     with pytest.raises(ValueError, match="Invalid value"):
         check_rotation_axes(("Roll", "101"))

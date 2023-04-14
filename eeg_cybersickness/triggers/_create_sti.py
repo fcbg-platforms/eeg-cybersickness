@@ -11,7 +11,7 @@ import pandas as pd
 from mne import create_info
 from mne.io import BaseRaw, RawArray
 
-from ..utils._checks import check_type, ensure_path, check_rotation_axes
+from ..utils._checks import check_rotation_axes, check_type, ensure_path
 from ..utils._docs import fill_doc
 from ..utils.logs import logger
 from . import load_triggers
