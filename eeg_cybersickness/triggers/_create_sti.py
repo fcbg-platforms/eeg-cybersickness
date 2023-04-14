@@ -9,17 +9,15 @@ from typing import TYPE_CHECKING, List, Tuple, Union
 import numpy as np
 import pandas as pd
 from mne import create_info
-from mne.io import RawArray
+from mne.io import BaseRaw, RawArray
 
-from ..utils._checks import check_type, ensure_path
+from ..utils._checks import check_type, ensure_path, check_rotation_axes
 from ..utils._docs import fill_doc
 from ..utils.logs import logger
 from . import load_triggers
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-    from mne.io import BaseRaw
 
 
 @fill_doc
@@ -41,6 +39,10 @@ def create_sti(
         MNE Raw object with a single "stim" channel containing the triggers
         for the rotation sequence played during that EEG recording.
     """
+    check_type(raw, (BaseRaw,), "raw")
+    check_type(session, ("int",), "session")
+    check_rotation_axes(rotation_axes)
+
     event = find_event_onset(raw, in_samples=True)
     info = create_info(["STI"], sfreq=raw.info["sfreq"], ch_types="stim")
     data = np.zeros(shape=(1, raw.times.size))
@@ -117,7 +119,7 @@ def _load_sequence(fname: Union[str, Path]) -> Tuple[List[int], List[float]]:
     return sequence_trigger, sequence_duration
 
 
-def find_event_onset(raw: BaseRaw, in_samples) -> Union[int, float]:
+def find_event_onset(raw: BaseRaw, in_samples: bool) -> Union[int, float]:
     """Find the paradigm event onset in the EEG recording.
 
     Parameters

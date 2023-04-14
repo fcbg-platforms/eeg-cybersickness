@@ -275,5 +275,5 @@ def check_rotation_axes(rotation_axes: Any):
             "invalid."
         )
     for elt in rotation_axes:
-        check_type(rotation_axes, (str,), "rotation_axes")
-        check_value(rotation_axes, ("Pitch", "Yaw", "Roll"), "rotation_axes")
+        check_type(elt, (str,), "rotation_axes")
+        check_value(elt, ("Pitch", "Yaw", "Roll"), "rotation_axes")
