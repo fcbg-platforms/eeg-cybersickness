@@ -53,7 +53,6 @@ def create_sti(
         return RawArray(data, info)
 
     rotation_axes = sorted(rotation_axes)
-    # TODO: Replace with importlib-resources
     sequence_fname = (
         files("eeg_cybersickness.triggers")
         / "sequences"
