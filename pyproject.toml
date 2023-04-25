@@ -42,6 +42,7 @@ dependencies = [
     'packaging',
     'pandas',
     'psutil',
+    'python-picard',
 ]
 
 [project.optional-dependencies]

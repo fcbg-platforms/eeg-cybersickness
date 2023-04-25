@@ -26,8 +26,8 @@ docdict[
     "root"
 ] = """
 root : path-like
-    Path to the folder containing ``"raw"`` (EEG recordings) and
-    ``"raw_aux"`` (Biopac recoridngs)."""
+    Path to the folder containing ``"raw"`` (EEG recordings),
+    ``"raw_aux"`` (Biopac recoridngs), and ``derivatives``."""
 
 docdict[
     "participant"
