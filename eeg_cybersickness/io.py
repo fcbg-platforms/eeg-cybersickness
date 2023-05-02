@@ -3,7 +3,7 @@
 # evaluated with eval() prior to type checking.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Tuple, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
 from bioread import read
@@ -17,6 +17,7 @@ from .utils.path import get_raw_fname
 
 if TYPE_CHECKING:
     from pathlib import Path
+    from typing import Tuple, Union
 
     from mne.io import BaseRaw
 
@@ -69,6 +70,13 @@ def read_raw(
     raw_biopac.drop_channels(["STI-Biopac"])
     raw_eeg.add_channels([raw_biopac, sti], force_update_info=True)
     raw_eeg.set_annotations(None)
+
+    # remove unused channels
+    channels_to_drop = [
+        ch for ch in ("M1", "M2", "EOG") if ch in raw_eeg.ch_names
+    ]
+    if len(channels_to_drop) != 0:
+        raw_eeg.drop_channels(channels_to_drop)
 
     return raw_eeg
 
