@@ -11,7 +11,7 @@ from eeg_cybersickness.utils.path import get_derivative_stem
 
 # %% Load raw recording
 root = "/mnt/Isilon/9003_CBT_HNP_MEEG/projects/project_cybersickness/data"
-participant = 57
+participant = 36
 session = 1
 raw = read_raw(root, participant, session)
 derivative_stem = get_derivative_stem(root, participant, session)
@@ -62,5 +62,8 @@ ica.apply(raw)
 raw.add_reference_channels(ref_channels="CPz")
 raw.set_eeg_reference("average", ch_type="eeg")
 raw.set_montage("standard_1020")
+raw.plot(theme="light")
+
+# %% Save preprocessed file
 fname = derivative_stem.with_name(f"{derivative_stem.name}-raw.fif")
 raw.save(fname)
