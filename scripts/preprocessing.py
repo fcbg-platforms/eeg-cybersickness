@@ -59,7 +59,7 @@ raw.set_montage(None)
 ica.apply(raw)
 
 # %% Add reference CPz
-raw.add_reference_channels(raw, ref_channels="CPz", copy=False)
+raw.add_reference_channels(ref_channels="CPz")
 raw.set_eeg_reference("average", ch_type="eeg")
 raw.set_montage("standard_1020")
 fname = derivative_stem.with_name(f"{derivative_stem.name}-raw.fif")
