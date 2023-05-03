@@ -16,9 +16,7 @@ if TYPE_CHECKING:
 
 
 @fill_doc
-def _init_logger(
-    *, verbose: Optional[Union[bool, str, int]] = None
-) -> logging.Logger:
+def _init_logger(*, verbose: Optional[Union[bool, str, int]] = None) -> logging.Logger:
     """Initialize a logger.
 
     Assigns sys.stdout as the first handler of the logger.

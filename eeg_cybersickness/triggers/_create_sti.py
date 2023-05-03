@@ -21,9 +21,7 @@ if TYPE_CHECKING:
 
 
 @fill_doc
-def create_sti(
-    raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]
-) -> RawArray:
+def create_sti(raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]) -> RawArray:
     """Create a synthetic trigger channel.
 
     Parameters
@@ -66,8 +64,7 @@ def create_sti(
         idx += int(duration * raw.info["sfreq"])
         if data.size <= idx:
             logger.warning(
-                "The entire rotation sequence could not be fitted in this "
-                "recording."
+                "The entire rotation sequence could not be fitted in this " "recording."
             )
             break
     return RawArray(data, info)
@@ -109,9 +106,7 @@ def _load_sequence(fname: Union[str, Path]) -> Tuple[List[int], List[float]]:
             sequence_trigger.append(triggers["none"])
             sequence_duration.append(row["duration"])
         else:
-            rotation_axes = sorted(
-                [key.lower() for key in axes if row[key] != 0]
-            )
+            rotation_axes = sorted([key.lower() for key in axes if row[key] != 0])
             sequence_trigger.append(triggers["_".join(rotation_axes)])
             sequence_duration.append(row["duration"])
 
@@ -142,9 +137,7 @@ def find_event_onset(raw: BaseRaw, in_samples: bool) -> Union[int, float]:
             event = annotation["onset"]
             break
     if event is None:
-        raise RuntimeError(
-            "The onset stimuli was not found in the EEG recording."
-        )
+        raise RuntimeError("The onset stimuli was not found in the EEG recording.")
     if in_samples:
         event = int(event * raw.info["sfreq"] - raw.first_samp)
     return event

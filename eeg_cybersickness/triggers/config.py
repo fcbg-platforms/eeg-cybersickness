@@ -55,8 +55,6 @@ def load_triggers(
     )
     for key in keys:
         if key not in triggers:
-            raise ValueError(
-                f"Key '{key}' is missing from trigger definition file."
-            )
+            raise ValueError(f"Key '{key}' is missing from trigger definition file.")
 
     return triggers

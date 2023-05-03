@@ -6,13 +6,9 @@ import pytest
 
 from eeg_cybersickness.triggers import load_triggers
 
-fname_valid = (
-    files("eeg_cybersickness.triggers.tests") / "data" / "test_triggers.ini"
-)
+fname_valid = files("eeg_cybersickness.triggers.tests") / "data" / "test_triggers.ini"
 fname_invalid = (
-    files("eeg_cybersickness.triggers.tests")
-    / "data"
-    / "test_triggers_invalid.ini"
+    files("eeg_cybersickness.triggers.tests") / "data" / "test_triggers_invalid.ini"
 )
 
 

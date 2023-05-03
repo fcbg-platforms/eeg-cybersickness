@@ -72,9 +72,7 @@ def read_raw(
     raw_eeg.set_annotations(None)
 
     # remove unused channels
-    channels_to_drop = [
-        ch for ch in ("M1", "M2", "EOG") if ch in raw_eeg.ch_names
-    ]
+    channels_to_drop = [ch for ch in ("M1", "M2", "EOG") if ch in raw_eeg.ch_names]
     if len(channels_to_drop) != 0:
         raw_eeg.drop_channels(channels_to_drop)
 

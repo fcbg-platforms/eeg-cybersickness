@@ -58,9 +58,7 @@ def get_raw_fname(
 
 
 @fill_doc
-def get_derivative_stem(
-    root: Union[str, Path], participant: int, session: int
-) -> Path:
+def get_derivative_stem(root: Union[str, Path], participant: int, session: int) -> Path:
     """Get the derivative file name stem from the participant and session.
 
     Parameters
@@ -121,7 +119,6 @@ def _check_root_participant_session(
         )
     if session <= 0 and 5 <= session:
         raise ValueError(
-            "The session ID should be set between 1 and 4. "
-            f"{session} is not valid."
+            "The session ID should be set between 1 and 4. " f"{session} is not valid."
         )
     return root, participant, session
