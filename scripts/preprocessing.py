@@ -38,6 +38,7 @@ raw.filter(
     fir_window="hamming",
     fir_design="firwin",
     pad="edge",
+    picks=["eeg", "ecg"],
 )
 raw.plot(theme="light")
 
