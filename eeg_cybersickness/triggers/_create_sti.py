@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from importlib.resources import files
-from typing import TYPE_CHECKING, List, Tuple, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -18,6 +18,7 @@ from . import load_triggers
 
 if TYPE_CHECKING:
     from pathlib import Path
+    from typing import List, Tuple, Union
 
 
 @fill_doc
