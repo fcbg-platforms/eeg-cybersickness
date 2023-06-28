@@ -44,10 +44,11 @@ def create_epochs(raw: BaseRaw, duration: float, overlap: float) -> BaseEpochs:
             f"{duration} seconds corresponds to {raw.info['sfreq'] * duration} samples."
         )
 
-    if overlap <= 0:
+    if overlap < 0:
         raise ValueError("Argument 'overlap' should be a strictly positive number.")
-    if (duration - overlap) * raw.info["sfreq"] != np.round(
-        (duration - overlap) * raw.info["sfreq"]
+    if not np.isclose(
+        (duration - overlap) * raw.info["sfreq"],
+        np.round((duration - overlap) * raw.info["sfreq"]),
     ):
         raise ValueError(
             "Argument 'overlap' does not define a precise number of samples. "
