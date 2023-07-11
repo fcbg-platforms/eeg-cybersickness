@@ -261,12 +261,15 @@ def check_rotation_axes(rotation_axes: Any, session: int):
     -------
     %(rotation_axes)s
     """
-    if session == 2 and rotation_axes is not None:
-        raise ValueError(
-            "Session 2 does not have any rotation. 'rotation_axes' should be an "
-            "empty tuple."
-        )
+    if session == 2:
+        if rotation_axes is not None:
+            raise ValueError(
+                "Session 2 does not have any rotation. 'rotation_axes' should be an "
+                "empty tuple."
+            )
     else:
+        if rotation_axes is None:
+            raise ValueError("'rotation_axes' should not be None for session 1, 3, 4.")
         check_type(rotation_axes, (tuple,), "rotation_axes")
         if len(rotation_axes) not in (1, 2, 3):
             raise ValueError(
