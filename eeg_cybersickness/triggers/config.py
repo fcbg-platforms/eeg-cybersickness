@@ -1,7 +1,4 @@
-# postponed evaluation of annotations, c.f. PEP 563 and PEP 649
-# alternatively, the type hints can be defined as strings which will be
-# evaluated with eval() prior to type checking.
-from __future__ import annotations
+from __future__ import annotations  # c.f. PEP 563 and PEP 649
 
 from configparser import ConfigParser
 from importlib.resources import files
@@ -29,7 +26,7 @@ def load_triggers(
     Returns
     -------
     triggers : dict
-        Trigger definitiopn containing: start, none, pitch, roll, yaw,
+        Trigger definitiopn containing: start, none, pitch, roll, yaw, question,
         pitch_yaw, pitch_roll, roll_yaw, pitch_roll_yaw.
     """
     fname = ensure_path(fname, must_exist=True)
@@ -48,6 +45,7 @@ def load_triggers(
         "pitch",
         "roll",
         "yaw",
+        "question",
         "pitch_roll",
         "pitch_yaw",
         "roll_yaw",

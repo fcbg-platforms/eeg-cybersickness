@@ -1,7 +1,4 @@
-# postponed evaluation of annotations, c.f. PEP 563 and PEP 649
-# alternatively, the type hints can be defined as strings which will be
-# evaluated with eval() prior to type checking.
-from __future__ import annotations
+from __future__ import annotations  # c.f. PEP 563 and PEP 649
 
 from typing import TYPE_CHECKING
 
@@ -17,7 +14,7 @@ from .utils.path import get_raw_fname
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Tuple, Union
+    from typing import Optional, Tuple, Union
 
     from mne.io import BaseRaw
 
@@ -27,7 +24,7 @@ def read_raw(
     root: Union[str, Path],
     participant: int,
     session: int,
-    rotation_axes: Tuple[str, ...] = ("Pitch", "Yaw", "Roll"),
+    rotation_axes: Optional[Tuple[str, ...]] = ("Pitch", "Yaw", "Roll"),
 ) -> BaseRaw:
     """Load a raw recording.
 
@@ -45,7 +42,7 @@ def read_raw(
         channel.
     """
     fname_eeg, fname_biopac = get_raw_fname(root, participant, session)
-    check_rotation_axes(rotation_axes)
+    check_rotation_axes(rotation_axes, session)
     raw_eeg = _read_raw_eeg(fname_eeg)
     raw_biopac = _read_raw_biopac(fname_biopac)
 

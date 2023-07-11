@@ -20,6 +20,7 @@ def test_load_triggers():
     assert tdef["yaw"] == 201
     assert tdef["roll"] == 301
     assert tdef["none"] == 401
+    assert tdef["question"] == 1
     assert tdef["pitch_roll"] == 102
     assert tdef["pitch_yaw"] == 202
     assert tdef["roll_yaw"] == 302

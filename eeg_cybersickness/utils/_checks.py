@@ -247,25 +247,33 @@ def ensure_path(item: Any, must_exist: bool) -> Path:
 
 
 @fill_doc
-def check_rotation_axes(rotation_axes: Any):
+def check_rotation_axes(rotation_axes: Any, session: int):
     """Check rotation_axes is valid.
 
     Parameters
     ----------
     rotation_axes : Any
         Tuple of rotation axes to check.
+    session : int
+        ID of the session.
 
     Returns
     -------
     %(rotation_axes)s
     """
-    check_type(rotation_axes, (tuple,), "rotation_axes")
-    if len(rotation_axes) not in (1, 2, 3):
+    if session == 2 and rotation_axes is not None:
         raise ValueError(
-            "'rotation_axes' should contain 1, 2 or 3 elements. "
-            f"The provided tuple contains {len(rotation_axes)} which is "
-            "invalid."
+            "Session 2 does not have any rotation. 'rotation_axes' should be an "
+            "empty tuple."
         )
-    for elt in rotation_axes:
-        check_type(elt, (str,), "rotation_axes")
-        check_value(elt, ("Pitch", "Yaw", "Roll"), "rotation_axes")
+    else:
+        check_type(rotation_axes, (tuple,), "rotation_axes")
+        if len(rotation_axes) not in (1, 2, 3):
+            raise ValueError(
+                "'rotation_axes' should contain 1, 2 or 3 elements. "
+                f"The provided tuple contains {len(rotation_axes)} which is "
+                "invalid."
+            )
+        for elt in rotation_axes:
+            check_type(elt, (str,), "rotation_axes")
+            check_value(elt, ("Pitch", "Yaw", "Roll"), "rotation_axes")

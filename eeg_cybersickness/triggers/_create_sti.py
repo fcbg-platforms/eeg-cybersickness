@@ -1,7 +1,4 @@
-# postponed evaluation of annotations, c.f. PEP 563 and PEP 649
-# alternatively, the type hints can be defined as strings which will be
-# evaluated with eval() prior to type checking.
-from __future__ import annotations
+from __future__ import annotations  # c.f. PEP 563 and PEP 649
 
 from importlib.resources import files
 from typing import TYPE_CHECKING
@@ -18,11 +15,11 @@ from . import load_triggers
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import List, Tuple, Union
+    from typing import List, Optional, Tuple, Union
 
 
 @fill_doc
-def create_sti(raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]) -> RawArray:
+def create_sti(raw: BaseRaw, session: int, rotation_axes: Optional[Tuple[str, ...]]) -> RawArray:
     """Create a synthetic trigger channel.
 
     Parameters
@@ -40,7 +37,7 @@ def create_sti(raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]) -> Ra
     """
     check_type(raw, (BaseRaw,), "raw")
     check_type(session, ("int",), "session")
-    check_rotation_axes(rotation_axes)
+    check_rotation_axes(rotation_axes, session)
 
     event = find_event_onset(raw, in_samples=True)
     info = create_info(["STI"], sfreq=raw.info["sfreq"], ch_types="stim")
@@ -51,7 +48,7 @@ def create_sti(raw: BaseRaw, session: int, rotation_axes: Tuple[str, ...]) -> Ra
         data[0, event] = triggers["start"]
         return RawArray(data, info)
 
-    rotation_axes = sorted(rotation_axes)
+    rotation_axes = ["None"] if rotation_axes is None else sorted(rotation_axes)
     sequence_fname = (
         files("eeg_cybersickness.triggers")
         / "sequences"
@@ -104,7 +101,10 @@ def _load_sequence(fname: Union[str, Path]) -> Tuple[List[int], List[float]]:
             continue
 
         if row["AngleAmout"] == 0 or all(row[key] == 0 for key in axes):
-            sequence_trigger.append(triggers["none"])
+            if row["duration"] == 4:
+                sequence_trigger.append(triggers["question"])
+            else:
+                sequence_trigger.append(triggers["none"])
             sequence_duration.append(row["duration"])
         else:
             rotation_axes = sorted([key.lower() for key in axes if row[key] != 0])
