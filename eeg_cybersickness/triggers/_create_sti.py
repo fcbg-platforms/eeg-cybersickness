@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 
 
 @fill_doc
-def create_sti(raw: BaseRaw, session: int, rotation_axes: Optional[Tuple[str, ...]]) -> RawArray:
+def create_sti(
+    raw: BaseRaw, session: int, rotation_axes: Optional[Tuple[str, ...]]
+) -> RawArray:
     """Create a synthetic trigger channel.
 
     Parameters

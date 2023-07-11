@@ -123,14 +123,14 @@ def test_check_rotation_axes():
     check_rotation_axes(None, 2)
 
     with pytest.raises(TypeError, match="must be an instance of tuple"):
-        check_rotation_axes(["Pitch", "Yaw", "Roll"])
+        check_rotation_axes(["Pitch", "Yaw", "Roll"], 1)
     with pytest.raises(TypeError, match="must be an instance of tuple"):
-        check_rotation_axes("Yaw")
+        check_rotation_axes("Yaw", 1)
     with pytest.raises(TypeError, match="must be an instance of str"):
-        check_rotation_axes((101,))
+        check_rotation_axes((101,), 1)
     with pytest.raises(ValueError, match="Invalid value"):
-        check_rotation_axes(("101",))
+        check_rotation_axes(("101",), 1)
     with pytest.raises(ValueError, match="Invalid value"):
-        check_rotation_axes(("Roll", "101"))
+        check_rotation_axes(("Roll", "101"), 1)
     with pytest.raises(ValueError, match="Session 2 does not have any rotation"):
         check_rotation_axes(("Roll", "Yaw"), 2)
