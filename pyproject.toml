@@ -34,6 +34,7 @@ classifiers = [
     'License :: OSI Approved :: MIT License',
 ]
 dependencies = [
+    'autoreject',
     'bioread',
     'h5io',
     'mne>=1.4.1',
