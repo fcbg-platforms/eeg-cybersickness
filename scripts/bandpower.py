@@ -75,10 +75,11 @@ root = Path("/mnt/Isilon/9003_CBT_HNP_MEEG/projects/project_cybersickness/data/"
 session = 2
 directory = root / f"derivatives-session-{session}"
 participants = [9, 12, 23, 28, 31, 32, 34, 36, 57, 58]
+# the resolution is 0.5 Hz because of the 2s welch segment length
 bands = {
     "delta": (1, 4),
-    "theta": (4, 8),
-    "alpha": (8, 13),
+    "theta": (4.5, 8),
+    "alpha": (8, 12.5),
     "beta": (13, 30),
 }
 
