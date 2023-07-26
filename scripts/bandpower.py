@@ -60,14 +60,13 @@ def compute_bandpower(
         fmax=30.0,
     )
     freq_res = spectrum.freqs[1] - spectrum.freqs[0]
-    psd_full = spectrum.get_data(fmin=raw.info["highpass"], fmax=30)
+    psd_full = spectrum.get_data(fmin=raw.info["highpass"], fmax=30).mean(axis=0)
     bp_full = simpson(psd_full, dx=freq_res, axis=-1)
     for band, (fmin, fmax) in bands.items():
         if raw.info["highpass"] == 4 and band == "delta":
             continue
-        psd = spectrum.get_data(fmin=fmin, fmax=fmax)
-        bp = simpson(psd, dx=freq_res, axis=-1) / bp_full
-        bandpowers[band] = np.average(bp, axis=0)
+        psd = spectrum.get_data(fmin=fmin, fmax=fmax).mean(axis=0)
+        bandpowers[band] = simpson(psd, dx=freq_res, axis=-1) / bp_full
     return bandpowers, len(epochs)
 
 
