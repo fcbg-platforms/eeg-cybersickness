@@ -36,6 +36,7 @@ classifiers = [
 dependencies = [
     'autoreject',
     'bioread',
+    'fooof',
     'h5io',
     'mne>=1.4.1',
     'mne-icalabel',
