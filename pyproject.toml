@@ -38,7 +38,7 @@ dependencies = [
     'bioread',
     'fooof',
     'h5io',
-    'mne>=1.4.1',
+    'mne==1.4.2',
     'mne-icalabel',
     'mne-qt-browser>=0.5.0',
     'numpy>=1.21',
