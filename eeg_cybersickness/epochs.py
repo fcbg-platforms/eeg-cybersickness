@@ -22,7 +22,7 @@ def create_epochs(raw: BaseRaw, duration: float, overlap: float) -> BaseEpochs:
     Parameters
     ----------
     raw : Raw
-        Preprocessed raw recording with a syntehtic STI channel.
+        Preprocessed raw recording with a synthetic STI channel.
     duration : float
         Duration of each epoch in seconds.
     overlap : float
