@@ -75,10 +75,10 @@ full = [
 ]
 
 [project.urls]
-homepage = 'https://github.com/fcbg-hnp-meeg/eeg-cybersickness'
-documentation = 'https://github.com/fcbg-hnp-meeg/eeg-cybersickness'
-source = 'https://github.com/fcbg-hnp-meeg/eeg-cybersickness'
-tracker = 'https://github.com/fcbg-hnp-meeg/eeg-cybersickness/issues'
+homepage = 'https://github.com/fcbg-platforms/eeg-cybersickness'
+documentation = 'https://github.com/fcbg-platforms/eeg-cybersickness'
+source = 'https://github.com/fcbg-platforms/eeg-cybersickness'
+tracker = 'https://github.com/fcbg-platforms/eeg-cybersickness/issues'
 
 [project.scripts]
 eeg_cybersickness-sys_info = 'eeg_cybersickness.commands.sys_info:run'
